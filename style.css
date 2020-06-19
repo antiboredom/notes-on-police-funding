@@ -1,0 +1,49 @@
+body {
+  font-family: "Times New Roman", serif;
+  font-size: 18px;
+  background-color: #ccc;
+}
+
+#container {
+  max-width: 1100px;
+  margin: auto;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+table,
+td,
+th {
+  font-weight: normal;
+  padding: 5px;
+  background-color: #fff;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+table,
+td,
+th {
+  border: none;
+  text-align: left;
+  background: #fff;
+}
+
+tr {
+  border-bottom: 1px solid #000;
+}
+
+.credits {
+  font-size: 0.9em;
+  color: #333;
+}
+
+.data-output {
+    font-size: 0.9em;
+}

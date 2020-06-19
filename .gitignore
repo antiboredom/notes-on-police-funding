@@ -1,0 +1,7 @@
+venv/
+*.mov
+.DS_Store
+.ipynb_checkpoints
+data/*.csv
+data/*.xlsx
+data/*.pdf
