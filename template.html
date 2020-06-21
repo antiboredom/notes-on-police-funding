@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Notes on Police Funding and the Stories that Cops Tell About Themselve
+    </title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div id="container">
+      {% for c in cells %}
+        <div class="cell {{ c.cell_type }}">
+          {% if c.cell_type == "markdown" %}
+            {{ c.source|join("\n")|markdown }}
+          {% elif c.cell_type == "code" %}
+
+            <div class="input">{{ c.source|join("\n")|trim|highlight }}</div>
+
+            {% for o in c.outputs %}
+              <div class="output">
+                {% if o.text %}
+                  {{ o.text|join("<br>")|safe }}
+                {% endif %}
+
+                {% if o.data and o.data["text/html"] %}
+                  {{ o.data["text/html"]|join("") }}
+                {% endif %}
+              </div>
+            {% endfor %}
+          {% endif %}
+
+        </div>
+      {% endfor %}
+    </div>
+    <script src="cops.js"></script>
+  </body>
+</html>
