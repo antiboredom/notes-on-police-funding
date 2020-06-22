@@ -6,27 +6,39 @@
     <title>
       Notes on Police Funding and the Stories that Cops Tell About Themselve
     </title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
     <div id="container">
+      <h1>
+        Notes on Police Funding and the Stories that Cops Tell About Themselve
+      </h1>
+
+      <p class="intro">Introduction text....</p>
+
       {% for c in cells %}
         <div class="cell {{ c.cell_type }}">
           {% if c.cell_type == "markdown" %}
             {{ c.source|join("\n")|markdown }}
           {% elif c.cell_type == "code" %}
 
-            <div class="input">{{ c.source|join("\n")|trim|highlight }}</div>
+            <!-- <div class="input">{{ c.source|join("\n")|trim|highlight }}</div> -->
 
             {% for o in c.outputs %}
               <div class="output">
                 {% if o.text %}
-                  {{ o.text|join("<br>")|safe }}
+                  {{ o.text|replace("\n", "<br>")|safe }}
                 {% endif %}
 
-                {% if o.data and o.data["text/html"] %}
-                  {{ o.data["text/html"]|join("") }}
+                {% if o.data %}
+                  {% if o.data["text/html"] %}
+                    {{ o.data["text/html"]|join("") }}
+                  {% endif %}
+                  {% if o.data["image/svg+xml"] %}
+                    {{ o.data["image/svg+xml"]|join("") }}
+                  {% endif %}
                 {% endif %}
               </div>
             {% endfor %}
@@ -35,6 +47,8 @@
         </div>
       {% endfor %}
     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="cops.js"></script>
   </body>
 </html>

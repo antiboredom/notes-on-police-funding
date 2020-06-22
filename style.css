@@ -1,13 +1,14 @@
 body {
   font-family: "Times New Roman", serif;
   font-size: 18px;
-  background-color: #ccc;
+  background-color: #eee;
 }
 
 #container {
   max-width: 1100px;
   margin: auto;
 }
+
 
 p,
 h1,
@@ -20,7 +21,18 @@ td,
 th {
   font-weight: normal;
   padding: 5px;
-  background-color: #fff;
+}
+
+h2 {
+  border-top: 1px solid #000;
+  margin-top: 50px;
+  padding-top: 50px;
+}
+
+table,
+td,
+th {
+  padding: 5px !important;
 }
 
 table {
@@ -29,17 +41,18 @@ table {
   /* table-layout: fixed; */
   overflow-wrap: break-word;
   word-wrap: break-word;
+  font-size: 14px;
 }
 table,
 td,
 th {
   border: none;
-  text-align: left;
+  text-align: left !important;
   background: #fff;
 }
 
 tr {
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #000 !important;
 }
 
 .credits {
@@ -75,7 +88,7 @@ pre {
 }
 
 .output {
-  max-height: 500px;
+  max-height: 60vh;
   overflow: scroll;
 }
 

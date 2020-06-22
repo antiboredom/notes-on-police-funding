@@ -23,7 +23,7 @@ env.filters["highlight"] = highlight
 
 template = env.from_string(open("template.html").read())
 
-cells = json.load(open("Exploration.ipynb", "r"))["cells"]
+cells = json.load(open("notes.ipynb", "r"))["cells"]
 
 rendered = template.render(cells=cells)
 
