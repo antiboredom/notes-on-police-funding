@@ -13,7 +13,9 @@ const someNiceColors = [
   // "#741d80",
   // "#801d45",
 ];
+
 const ThreeManager = {
+  // adapted from https://threejsfundamentals.org/threejs/lessons/threejs-multiple-scenes.html
   async init() {
     this.canvas = document.createElement("canvas");
     this.renderer = new THREE.WebGLRenderer({
@@ -56,14 +58,6 @@ const ThreeManager = {
 
   makeScene(elem) {
     const scene = new THREE.Scene();
-
-    // const fov = 45;
-    // const aspect = 2; // the canvas default
-    // const near = 0.1;
-    // const far = 5;
-    // const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    // camera.position.set(0, 1, 2);
-    // camera.lookAt(0, 0, 0);
 
     const camera = new THREE.PerspectiveCamera(
       25,
@@ -133,7 +127,9 @@ const ThreeManager = {
     for (const { elem, fn, ctx } of this.sceneElements) {
       // get the viewport relative position of this element
       const rect = elem.getBoundingClientRect();
-      const { left, right, top, bottom, width, height } = rect;
+      let { left, right, top, bottom, width, height } = rect;
+      width = Math.floor(width);
+      height = Math.floor(height);
       const rendererCanvas = this.renderer.domElement;
 
       const isOffscreen =
@@ -418,9 +414,7 @@ Vue.component("serious-text", {
 
       scene.add(textGroup);
 
-      ThreeManager.fitCameraToSelection(camera, controls, textGroup.children, 1.2);
-
-      camera.position.z = 80;
+      ThreeManager.fitCameraToSelection(camera, controls, textGroup.children, 1.1);
 
       return (time, rect) => {
         camera.aspect = rect.width / rect.height;
