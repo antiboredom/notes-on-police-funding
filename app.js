@@ -94,6 +94,39 @@ const ThreeManager = {
     return { scene, camera, controls };
   },
 
+  fitCameraToSelection(camera, controls, selection, fitOffset = 1.2) {
+    // from https://discourse.threejs.org/t/camera-zoom-to-fit-object/936/24
+    const box = new THREE.Box3();
+
+    for (const object of selection) box.expandByObject(object);
+
+    const size = box.getSize(new THREE.Vector3());
+    const center = box.getCenter(new THREE.Vector3());
+
+    const maxSize = Math.max(size.x, size.y, size.z);
+    const fitHeightDistance =
+      maxSize / (2 * Math.atan((Math.PI * camera.fov) / 360));
+    const fitWidthDistance = fitHeightDistance / camera.aspect;
+    const distance = fitOffset * Math.max(fitHeightDistance, fitWidthDistance);
+
+    const direction = controls.target
+      .clone()
+      .sub(camera.position)
+      .normalize()
+      .multiplyScalar(distance);
+
+    controls.maxDistance = distance * 10;
+    controls.target.copy(center);
+
+    camera.near = distance / 100;
+    camera.far = distance * 100;
+    camera.updateProjectionMatrix();
+
+    camera.position.copy(controls.target).sub(direction);
+
+    controls.update();
+  },
+
   render(time) {
     time *= 0.001;
 
@@ -347,6 +380,8 @@ Vue.component("serious-text", {
         // bevelSegments: 5
       });
 
+      const textGroup = new THREE.Group();
+
       geometry.computeBoundingBox();
       const bbox = geometry.boundingBox;
 
@@ -358,7 +393,7 @@ Vue.component("serious-text", {
       mesh1.position.x = -20;
       mesh1.rotation.x = -0.1;
 
-      scene.add(mesh1);
+      textGroup.add(mesh1);
 
       let mesh2;
 
@@ -378,8 +413,12 @@ Vue.component("serious-text", {
         mesh2.position.x = -20;
         mesh2.position.y = -(Math.abs(bbox.max.y) + Math.abs(bbox.min.y)) - 0.8;
         mesh2.rotation.x = -0.1;
-        scene.add(mesh2);
+        textGroup.add(mesh2);
       }
+
+      scene.add(textGroup);
+
+      ThreeManager.fitCameraToSelection(camera, controls, textGroup.children, 1.2);
 
       camera.position.z = 80;
 
