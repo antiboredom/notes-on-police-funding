@@ -13,7 +13,7 @@
   <body>
     <div id="container">
       <h1>
-        Notes on Police Funding and the Stories that Cops Tell About Themselve
+        Notes on Police Funding and the Stories that Cops Tell About Themselves
       </h1>
 
       <p class="intro">Introduction text....</p>
@@ -24,7 +24,9 @@
             {{ c.source|join("\n")|markdown }}
           {% elif c.cell_type == "code" %}
 
-            <!-- <div class="input">{{ c.source|join("\n")|trim|highlight }}</div> -->
+          {% if c.outputs|length > 0 %}
+            <div class="input">{{ c.source|join("\n")|trim|highlight }}</div>
+          {% endif %}
 
             {% for o in c.outputs %}
               <div class="output">
@@ -38,6 +40,9 @@
                   {% endif %}
                   {% if o.data["image/svg+xml"] %}
                     {{ o.data["image/svg+xml"]|join("") }}
+                  {% endif %}
+                  {% if o.data["image/png"] %}
+                    <img src="data:image/png;base64, {{ o.data["image/png"]|join("") }}">
                   {% endif %}
                 {% endif %}
               </div>
