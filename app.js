@@ -43,8 +43,7 @@ const ThreeManager = {
         if (font) {
           this.fonts[fontname] = font;
           resolve(font);
-        }
-        else return reject(err);
+        } else return reject(err);
       });
     });
   },
@@ -308,7 +307,7 @@ Vue.component("serious-text", {
   data() {
     return {
       realcolors: [],
-    }
+    };
   },
   mounted() {
     if (!this.colors || this.colors.length == 0) {
@@ -329,7 +328,7 @@ Vue.component("serious-text", {
       // return `linear-gradient(top,  #11e8bb 0%, #8200c9 100%)`;
       // return `linear-gradient(90deg, #11e8bb 0%, #8200c9 100%)`
       // return `linear-gradient(180deg, ${this.realcolors[1]} 0%, ${this.realcolors[0]} 100%)`
-      return `radial-gradient(#fff 0%, #ccc 100%)`
+      return `radial-gradient(#fff 0%, #ccc 100%)`;
     },
   },
   methods: {
@@ -390,13 +389,12 @@ Vue.component("serious-text", {
         controls.handleResize();
         controls.update();
 
-        mesh2.rotation.y = -Math.sin(time)/2;
-        mesh1.rotation.y = Math.sin(time)/2;
+        mesh2.rotation.y = -Math.sin(time) / 2;
+        mesh1.rotation.y = Math.sin(time) / 2;
         ThreeManager.renderer.render(scene, camera);
       };
     },
-  }
-
+  },
 });
 
 Vue.component("pie", {
@@ -420,7 +418,12 @@ Vue.component("pie", {
   props: ["keys", "values", "title"],
 
   data() {
-    return { colors: [], speed: Math.random() * 0.001 };
+    return {
+      colors: [],
+      speedy: Math.random() * 0.01,
+      speedx: Math.random() * 0.01,
+      speedz: Math.random() * 0.02 - 0.01,
+    };
   },
 
   mounted() {
@@ -473,7 +476,9 @@ Vue.component("pie", {
       // camera.position.z = 30;
 
       return (time, rect) => {
-        // pie.pie.rotation.y += this.speed;
+        // pie.pie.rotation.y += this.speedy;
+        // pie.pie.rotation.x += this.speedx;
+        pie.pie.rotation.z += this.speedz;
         camera.aspect = rect.width / rect.height;
         camera.updateProjectionMatrix();
         // controls.handleResize();
