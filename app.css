@@ -89,7 +89,6 @@ section {
 }
 
 section.intro {
-
   columns: 2;
 }
 
@@ -181,6 +180,31 @@ pre {
 
 .highlight {
   font-size: 14px;
+}
+
+@media (max-width: 1200px) {
+}
+
+@media (max-width: 950px) {
+}
+
+@media (max-width: 820px) {
+  #container {
+    padding: 5px;
+  }
+  section.intro {
+    columns: 1;
+  }
+  .item {
+    display: block;
+  }
+  .notes, .cell {
+    width: 100%;
+    padding: 0px;
+  }
+  .three-container {
+    height: 400px;
+  }
 }
 
 .highlight .hll { background-color: #ffffcc }
