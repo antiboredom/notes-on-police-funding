@@ -3,7 +3,7 @@
 }
 
 body {
-  font-size: 20px;
+  font-size: 18px;
   font-family: "Comic Sans MS", "Comic Sans", cursive;
   font-family: cursive;
   font-family: "Times New Roman", serif;
@@ -27,6 +27,14 @@ h1, h2, h3, h4, h5 {
 h1 {
   margin-bottom: 0;
   font-size: 50px;
+}
+
+h2 {
+  font-size: 32px;
+}
+
+h3 {
+  font-size: 28px;
 }
 
 .credits {
@@ -101,6 +109,7 @@ svg {
 .notes {
   width: 35%;
   padding-right: 20px;
+  font-size: 22px;
 }
 
 .cell {

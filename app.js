@@ -14,20 +14,39 @@ const someNiceColors = [
   // "#801d45",
 ];
 const ThreeManager = {
-  init() {
+  async init() {
     this.canvas = document.createElement("canvas");
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
       alpha: true,
       antialias: true,
     });
-    this.renderer.setClearColor(0xffffff, 1);
+    this.renderer.setClearColor(0xffffff, 0);
 
     this.renderer.setScissorTest(true);
 
     this.sceneElements = [];
 
+    this.fonts = {};
+    this.fontLoader = new THREE.FontLoader();
+
+    await this.loadFont("helvetiker_bold.json");
+
     requestAnimationFrame(this.render.bind(this));
+  },
+
+  loadFont(fontname) {
+    return new Promise((resolve, reject) => {
+      if (this.fonts[fontname]) return resolve(this.fonts[fontname]);
+
+      this.fontLoader.load(fontname, (font, err) => {
+        if (font) {
+          this.fonts[fontname] = font;
+          resolve(font);
+        }
+        else return reject(err);
+      });
+    });
   },
 
   addScene(elem, fn) {
@@ -222,6 +241,7 @@ class PieChart {
     return segment;
   }
 }
+
 Vue.component("datatable", {
   template: `
     <div class="datatable" ref="tbody">
@@ -278,6 +298,105 @@ Vue.component("datatable", {
       }
     },
   },
+});
+
+Vue.component("serious-text", {
+  template: `
+    <div class="three-container" ref="threeContainer" :style="{background: gradient}"></div>
+  `,
+  props: ["line1", "line2", "colors"],
+  data() {
+    return {
+      realcolors: [],
+    }
+  },
+  mounted() {
+    if (!this.colors || this.colors.length == 0) {
+      this.realcolors = someNiceColors
+        .slice()
+        .sort(function () {
+          return 0.5 - Math.random();
+        })
+        .slice(0, 2);
+    } else {
+      this.realcolors = this.colors;
+    }
+    const sceneRenderFunction = this.render(this.$refs.threeContainer);
+    ThreeManager.addScene(this.$refs.threeContainer, sceneRenderFunction);
+  },
+  computed: {
+    gradient() {
+      // return `linear-gradient(top,  #11e8bb 0%, #8200c9 100%)`;
+      // return `linear-gradient(90deg, #11e8bb 0%, #8200c9 100%)`
+      // return `linear-gradient(180deg, ${this.realcolors[1]} 0%, ${this.realcolors[0]} 100%)`
+      return `radial-gradient(#fff 0%, #666 100%)`
+    },
+  },
+  methods: {
+    render(elem) {
+      const { scene, camera, controls } = ThreeManager.makeScene(elem);
+
+      const geometry = new THREE.TextGeometry(this.line1, {
+        font: ThreeManager.fonts["helvetiker_bold.json"],
+        size: 3,
+        height: 3,
+        curveSegments: 12,
+        // bevelEnabled: true,
+        // bevelThickness: 10,
+        // bevelSize: 8,
+        // bevelOffset: 0,
+        // bevelSegments: 5
+      });
+
+      geometry.computeBoundingBox();
+      const bbox = geometry.boundingBox;
+
+      const mat = new THREE.MeshStandardMaterial({
+        color: this.realcolors[0],
+      });
+
+      const mesh1 = new THREE.Mesh(geometry, mat);
+      mesh1.position.x = -20;
+      mesh1.rotation.x = -0.1;
+
+      scene.add(mesh1);
+
+      let mesh2;
+
+      if (this.line2) {
+        const geometry = new THREE.TextGeometry(this.line2, {
+          font: ThreeManager.fonts["helvetiker_bold.json"],
+          size: 3,
+          height: 3,
+          curveSegments: 12,
+        });
+
+        const mat = new THREE.MeshStandardMaterial({
+          color: this.realcolors[1],
+        });
+
+        mesh2 = new THREE.Mesh(geometry, mat);
+        mesh2.position.x = -20;
+        mesh2.position.y = -bbox.max.y - 0.5;
+        mesh2.rotation.x = -0.1;
+        scene.add(mesh2);
+      }
+
+      camera.position.z = 80;
+
+      return (time, rect) => {
+        camera.aspect = rect.width / rect.height;
+        camera.updateProjectionMatrix();
+        controls.handleResize();
+        controls.update();
+
+        mesh2.rotation.y = -Math.sin(time)/2;
+        mesh1.rotation.y = Math.sin(time)/2;
+        ThreeManager.renderer.render(scene, camera);
+      };
+    },
+  }
+
 });
 
 Vue.component("pie", {
@@ -381,6 +500,9 @@ Vue.component("cell", {
       <div v-if="item.data && item.data.chart" class="outputs">
         <pie :keys="item.data.index" :values="item.data.data.flat()" :title="item.data.title"></pie>
       </div>
+      <div v-else-if="item.data && item.data.bigtext" class="outputs">
+        <serious-text :line1="item.data.line1" :line2="item.data.line2" :colors="item.data.colors"></serious-text>
+      </div>
       <div v-else-if="item.svg" class="outputs">
         <div class="svg" v-html="item.svg"></div>
       </div>
@@ -401,7 +523,7 @@ const app = new Vue({
     sections: [],
   },
   async created() {
-    ThreeManager.init();
+    await ThreeManager.init();
     let response = await fetch("notes.json");
     let data = await response.json();
     this.sections = data;
