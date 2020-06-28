@@ -377,7 +377,7 @@ Vue.component("serious-text", {
 
         mesh2 = new THREE.Mesh(geometry, mat);
         mesh2.position.x = -20;
-        mesh2.position.y = -bbox.max.y - 0.5;
+        mesh2.position.y = -(Math.abs(bbox.max.y) + Math.abs(bbox.min.y)) - 0.8;
         mesh2.rotation.x = -0.1;
         scene.add(mesh2);
       }
