@@ -329,7 +329,7 @@ Vue.component("serious-text", {
       // return `linear-gradient(top,  #11e8bb 0%, #8200c9 100%)`;
       // return `linear-gradient(90deg, #11e8bb 0%, #8200c9 100%)`
       // return `linear-gradient(180deg, ${this.realcolors[1]} 0%, ${this.realcolors[0]} 100%)`
-      return `radial-gradient(#fff 0%, #666 100%)`
+      return `radial-gradient(#fff 0%, #ccc 100%)`
     },
   },
   methods: {
