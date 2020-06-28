@@ -18,7 +18,7 @@ In recent years, police departments have become more data driven and we run the 
 
 [^0]: Citation needed
 
-[^1]: Private tweet from Marimae Kaba [(@prisonculture)](https://twitter.com/prisonculture/status/1271979397688541184) on Twitter. 
+[^1]: Private tweet from Mariame Kaba ([@prisonculture](https://twitter.com/prisonculture/status/1271979397688541184)) on Twitter. 
 
 [^2]: Citation needed
 
