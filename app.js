@@ -414,7 +414,7 @@ Vue.component("serious-text", {
 
       scene.add(textGroup);
 
-      ThreeManager.fitCameraToSelection(camera, controls, textGroup.children, 1.1);
+      ThreeManager.fitCameraToSelection(camera, controls, textGroup.children, 1.01);
 
       return (time, rect) => {
         camera.aspect = rect.width / rect.height;
